@@ -1,0 +1,8 @@
+{:lein         {:profile "+shadow-cljs"}
+ :builds       {:app {:target     :browser
+                      :output-dir "resources/public/js"
+                      :asset-path "/js"
+                      :modules    {:app {:entries [signably.core]}}
+                      :devtools   {:after-load signably.core/mount-root}}}
+ :dev-http     {3000 {:root    "resources/public"
+                      :handler signably.handler/app}}}
