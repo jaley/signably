@@ -16,13 +16,13 @@
                  [yogthos/config "1.1.7"]
                  [org.clojure/clojurescript "1.10.866"
                   :scope "provided"]
-                 [metosin/reitit "0.5.12"]                 
+                 [metosin/reitit "0.5.12"]
                  [pez/clerk "1.0.0"]
                  [venantius/accountant "0.2.5"
                   :exclusions [org.clojure/tools.reader]]]
 
   :jvm-opts ["-Xmx1G"]
-  
+
   :plugins [[lein-environ "1.1.0"]
             [lein-cljsbuild "1.1.7"]
             [lein-asset-minifier "0.4.6"
@@ -66,12 +66,7 @@
               :output-dir "target/cljsbuild/public/js/out"
               :source-map true
               :optimizations :none
-              :pretty-print  true}}
-
-
-
-            }
-   }
+              :pretty-print  true}}}}
 
   :figwheel
   {:http-server-root "public"
@@ -93,20 +88,19 @@
                                   [figwheel-sidecar "0.5.20"]
                                   [nrepl "0.8.3"]
                                   [thheller/shadow-cljs "2.14.3"]
-                                  [pjstadig/humane-test-output "0.10.0"]
-                                  
- ]
+                                  [pjstadig/humane-test-output "0.10.0"]]
 
                    :source-paths ["env/dev/clj"]
-                   :plugins [[lein-figwheel "0.5.20"]
-]
+                   :plugins [[lein-figwheel "0.5.20"]]
 
                    :injections [(require 'pjstadig.humane-test-output)
                                 (pjstadig.humane-test-output/activate!)]
 
                    :env {:dev true}}
 
-             :shadow-cljs {:dependencies [[com.google.javascript/closure-compiler-unshaded "v20210505"]]}
+             :shadow-cljs
+             {:dependencies
+              [[com.google.javascript/closure-compiler-unshaded "v20210505"]]}
 
              :uberjar {:hooks [minify-assets.plugin/hooks]
                        :source-paths ["env/prod/clj"]
