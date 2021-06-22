@@ -1,6 +1,7 @@
 (ns signably.core
   (:require
    [signably.presence :as presence]
+   [signably.canvas :as canvas]
    [reagent.core :as reagent :refer [atom]]
    [reagent.dom :as rdom]
    [reagent.session :as session]
@@ -16,7 +17,8 @@
    [["/" :home]
     ["/card/:card-id"
      ["" :card]
-     ["/zoom" :zoom]]]))
+     ["/zoom" :zoom]]
+    ["/about" :about]]))
 
 (defn path-for [route & [params]]
   (if params
@@ -31,7 +33,9 @@
   [:div#nav.nav-bar
    [:div.nav-title "Signably"]
    [:div.nav-links
-    [:p [:a {:href (path-for :index)} "Home"] " | "
+    [:p
+     [:a {:href (path-for :home)} "Home"]
+     " | "
      [:a {:href (path-for :about)} "About Signably"]]]])
 
 
@@ -58,7 +62,7 @@
   (fn []
     [:div.section
      [presence/control ["James" "Bob"]]
-     [:p "Card goes here"]]))
+     [canvas/component "signing-canvas" 1080 768]]))
 
 ;; -------------------------
 ;; Translate routes -> page components
