@@ -5,13 +5,15 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.10.3"]
-                 [ring-server "0.5.0"]
                  [reagent "1.1.0"]
                  [reagent-utils "0.3.3"]
+                 [cljs-ajax "0.8.3"]
                  [cljsjs/react "17.0.2-0"]
                  [cljsjs/react-dom "17.0.2-0"]
                  [ring "1.8.1"]
                  [ring/ring-defaults "0.3.2"]
+                 [ring-middleware-format "0.7.4"]
+                 [ring-server "0.5.0"]
                  [hiccup "1.0.5"]
                  [yogthos/config "1.1.7"]
                  [org.clojure/clojurescript "1.10.866"
@@ -27,9 +29,6 @@
             [lein-cljsbuild "1.1.7"]
             [lein-asset-minifier "0.4.6"
              :exclusions [org.clojure/clojure]]]
-
-  :ring {:handler signably.handler/app
-         :uberwar-name "signably.war"}
 
   :min-lein-version "2.5.0"
   :uberjar-name "signably.jar"
@@ -72,12 +71,8 @@
   {:http-server-root "public"
    :server-port 3449
    :nrepl-port 7002
-   :nrepl-middleware [cider.piggieback/wrap-cljs-repl
-                      ]
-   :css-dirs ["resources/public/css"]
-   :ring-handler signably.handler/app}
-
-
+   :nrepl-middleware [cider.piggieback/wrap-cljs-repl]
+   :css-dirs ["resources/public/css"]}
 
   :profiles {:dev {:repl-options {:init-ns signably.repl}
                    :dependencies [[cider/piggieback "0.5.2"]

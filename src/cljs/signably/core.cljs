@@ -7,7 +7,8 @@
    [reagent.session :as session]
    [reitit.frontend :as reitit]
    [clerk.core :as clerk]
-   [accountant.core :as accountant]))
+   [accountant.core :as accountant]
+   [ajax.core :refer [GET POST]]))
 
 ;; -------------------------
 ;; Routes
@@ -38,13 +39,22 @@
      " | "
      [:a {:href (path-for :about)} "About Signably"]]]])
 
+(defn new-card!
+  []
+  (POST "/api/card"
+        {:params {:message "message goes here"
+                  :user-id "abcd-1234"}
+         :handler (fn [{:keys [id] :as response}]
+                    (accountant/navigate! (path-for :card {:card-id id}))                    )
+         :error-handler (fn [response]
+                          (.log js/console "New card error: " response))}))
 
 (defn home-page
   []
   (fn []
     [:div.section
      [:div
-      [:button {:onClick #(accountant/navigate! (path-for :card {:card-id 1}))}
+      [:button {:on-click new-card!}
        "New Card"]]
      [:div
       [:h4 "Open Cards"]
@@ -101,8 +111,7 @@
         (reagent/after-render clerk/after-render!)
         (session/put! :route {:current-page (page-for current-page)
                               :route-params route-params})
-        (clerk/navigate-page! path)
-        ))
+        (clerk/navigate-page! path)))
     :path-exists?
     (fn [path]
       (boolean (reitit/match-by-path router path)))})

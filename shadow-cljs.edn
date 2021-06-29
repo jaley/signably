@@ -4,5 +4,7 @@
                       :asset-path "/js"
                       :modules    {:app {:entries [signably.core]}}
                       :devtools   {:after-load signably.core/mount-root}}}
- :dev-http     {3000 {:root    "resources/public"
-                      :handler signably.handler/app}}}
+ }
+
+;;:dev-http     {3000 {:root    "resources/public"
+;;                     :handler signably.handler/app}}
