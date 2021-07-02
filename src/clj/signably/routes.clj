@@ -14,5 +14,5 @@
    (reitit-ring/routes
     (service/api-routes store)
     (reitit-ring/create-resource-handler {:path "/" :root "/public"})
-    (reitit-ring/create-default-handler))
+    spa/render-spa) ; default route: render SPA and let it check client side
    {:middleware middleware}))
