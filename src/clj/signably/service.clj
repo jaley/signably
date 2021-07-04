@@ -2,6 +2,7 @@
   "Routes and handler functions for the service API"
   (:require
    [signably.db :as db]
+   [signably.ably :as ably]
    [reitit.ring :as reitit-ring]))
 
 (defn- new-card-handler
@@ -11,11 +12,14 @@
     ;; TODO: User ID should NOT be a client parameter!
     (let [user (get-in req [:params :user-id])
           msg  (get-in req [:params :message] "")]
-      (if-let [card (db/create-card store user {:message msg})]
-        {:status 200
-         :body card}
-        {:status 400
-         :body {:message "Error creating card"}}))))
+      (let [card (db/create-card store user {:message msg})
+            token-req (ably/generate-token-for-client user (:id card))]
+        (if card
+          {:status 200
+           :body {:card card
+                  :ably-token-request token-req}}
+          {:status 400
+           :body {:message "Error creating card"}})))))
 
 (defn- load-card-handler
   "Create a handler function for loading card state from storage"
@@ -29,6 +33,7 @@
          :body {:message "Not found"}}))))
 
 (defn api-routes
+  "Returns a Ring handler for the /api service endpoints"
   [store]
   (reitit-ring/ring-handler
    (reitit-ring/router

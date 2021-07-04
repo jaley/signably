@@ -44,8 +44,9 @@
   (POST "/api/card"
         {:params {:message "message goes here"
                   :user-id "abcd-1234"}
-         :handler (fn [{:keys [id] :as response}]
-                    (accountant/navigate! (path-for :card {:card-id id}))                    )
+         :handler (fn [{:keys [card ably-token-request] :as response}]
+                    (.log js/console (clj->js ably-token-request))
+                    (accountant/navigate! (path-for :card {:card-id (:id card)})))
          :error-handler (fn [response]
                           (.log js/console "New card error: " response))}))
 
