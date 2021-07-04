@@ -1,107 +1,46 @@
 (ns signably.core
+  "SPA main entry point"
   (:require
-   [signably.presence :as presence]
-   [signably.canvas :as canvas]
-   [reagent.core :as reagent :refer [atom]]
+   [signably.components.nav :as nav]
+   [signably.views.home :as home]
+   [signably.views.card :as card]
+   [signably.views.about :as about]
+   [signably.router :refer [router]]
+   [reagent.core :as reagent]
    [reagent.dom :as rdom]
    [reagent.session :as session]
    [reitit.frontend :as reitit]
    [clerk.core :as clerk]
-   [accountant.core :as accountant]
-   [ajax.core :refer [GET POST]]))
+   [accountant.core :as accountant]))
 
-;; -------------------------
-;; Routes
-
-(def router
-  (reitit/router
-   [["/" :home]
-    ["/card/:card-id"
-     ["" :card]
-     ["/zoom" :zoom]]
-    ["/about" :about]]))
-
-(defn path-for [route & [params]]
-  (if params
-    (:path (reitit/match-by-name router route params))
-    (:path (reitit/match-by-name router route))))
-
-;; -------------------------
-;; Page components
-
-(defn nav-component
+(defn current-page
+  "Returns a factory to render current page (as set in session),
+  with nav header"
   []
-  [:div#nav.nav-bar
-   [:div.nav-title "Signably"]
-   [:div.nav-links
-    [:p
-     [:a {:href (path-for :home)} "Home"]
-     " | "
-     [:a {:href (path-for :about)} "About Signably"]]]])
-
-(defn new-card!
-  []
-  (POST "/api/card"
-        {:params {:message "message goes here"
-                  :user-id "abcd-1234"}
-         :handler (fn [{:keys [card ably-token-request] :as response}]
-                    (.log js/console (clj->js ably-token-request))
-                    (accountant/navigate! (path-for :card {:card-id (:id card)})))
-         :error-handler (fn [response]
-                          (.log js/console "New card error: " response))}))
-
-(defn home-page
-  []
-  (fn []
-    [:div.section
-     [:div
-      [:button {:on-click new-card!}
-       "New Card"]]
-     [:div
-      [:h4 "Open Cards"]
-      [:p "You have no cards open."]]]))
-
-
-(defn about-page
-  []
-  (fn []
-    [:span.main
-     [:h1 "About signably"]]))
-
-(defn card-page
-  []
-  (fn []
-    [:div.section
-     [presence/control ["James" "Bob"]]
-     [canvas/component "signing-canvas" 1080 768]]))
-
-;; -------------------------
-;; Translate routes -> page components
-
-(defn page-for [route]
-  (case route
-    :home #'home-page
-    :about #'about-page
-    :card #'card-page))
-
-
-;; -------------------------
-;; Page mounting component
-
-(defn current-page []
   (fn []
     (let [page (:current-page (session/get :route))]
       [:div
-       [nav-component]
+       [nav/init]
        [page]])))
 
-;; -------------------------
-;; Initialize app
+(defn mount-root
+  "Attach to root element in dom. Backend should serve a #app div."
+  []
+  (rdom/render
+   [current-page]
+   (.getElementById js/document "app")))
 
-(defn mount-root []
-  (rdom/render [current-page] (.getElementById js/document "app")))
+(defn page-for
+  "Returns the factory function (var) for the given page alias (keyword)"
+  [route]
+  (case route
+    :home #'home/init
+    :about #'about/init
+    :card #'card/init))
 
-(defn init! []
+(defn init!
+  "Entry point, called by script tag in page served by backend"
+  []
   (clerk/initialize!)
   (accountant/configure-navigation!
    {:nav-handler

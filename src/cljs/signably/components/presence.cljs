@@ -1,4 +1,4 @@
-(ns signably.presence)
+(ns signably.components.presence)
 
 (defprotocol User
   ;; TODO: Need to add an id so that we don't redraw the whole list on updates
@@ -11,11 +11,12 @@
   (label [usr] usr)
   (color [usr] "green"))
 
-(defn control
-  "Reagent render function for presence component"
+(defn init
+  "Returns a factory fn for the presence bar"
   [users]
-  [:div.presence
-   [:div.presence-title "Active Signees"]
-   [:ul.presence-list
-    (for [user users]
-      [:li {:style {:color (color user)}} (name user)])]])
+  (fn []
+    [:div.presence
+     [:div.presence-title "Active Signees"]
+     [:ul.presence-list
+      (for [user users]
+        [:li {:style {:color (color user)}} (name user)])]]))

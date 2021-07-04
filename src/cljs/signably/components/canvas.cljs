@@ -1,4 +1,4 @@
-(ns signably.canvas)
+(ns signably.components.canvas)
 
 (defprotocol Stroke
   (next-point [s e] "Process next movement event")
@@ -43,7 +43,7 @@
      (doto ctx .beginPath (.moveTo x y)))))
 
 
-(defn component
+(defn init
   "Return a factory to produce the canvas element"
   [id w h]
   (let [open-stroke (atom nil)]
