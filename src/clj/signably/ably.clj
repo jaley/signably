@@ -29,10 +29,19 @@
    {}
    (into {} param-map)))
 
+(defn client-capabilities
+  "Generate a map of capabilities required for a client to collaborate on
+  the given card-id. Return value is JSON string expected by SDK"
+  [card-id]
+  (json/encode
+   {(str "signatures:card-" card-id) ["subscribe", "publish", "presence"]}))
+
 (defn generate-token-for-client
   "Generate an Ably access token for client with given client-id"
-  [client-id]
-  (let [token-params (pojo Auth$TokenParams :clientId client-id)]
+  [client-id card-id]
+  (let [token-params (pojo Auth$TokenParams
+                           :clientId   client-id
+                           :capability (client-capabilities card-id))]
     (-> (rest-client)
         .auth
         (.createTokenRequest token-params nil)
