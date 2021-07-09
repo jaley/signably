@@ -2,6 +2,7 @@
   "Home landing page view"
   (:require
    [signably.router :refer [path-for]]
+   [signably.session :refer [session-id]]
    [accountant.core :as accountant]
    [ajax.core :as ajax]))
 
@@ -9,13 +10,18 @@
   "Click hanlder fn for new card creation"
   []
   (ajax/POST "/api/card"
-        {:params {:message "message goes here"
-                  :user-id "abcd-1234"}
-         :handler (fn [{:keys [card ably-token-request] :as response}]
-                    (.log js/console (clj->js ably-token-request))
-                    (accountant/navigate! (path-for :card {:card-id (:id card)})))
-         :error-handler (fn [response]
-                          (.log js/console "New card error: " response))}))
+             {:params {:message "message goes here"
+                       ;; TODO: temporarily using session IDs as users
+                       :user-id (session-id)}
+
+              :handler
+              (fn [{:keys [card ably-token-request] :as response}]
+                (accountant/navigate!
+                 (path-for :card {:card-id (:id card)})))
+
+              :error-handler
+              (fn [response]
+                (.log js/console "New card error: " response))}))
 
 (defn init
   "Returns a factory for the home landing page view"
