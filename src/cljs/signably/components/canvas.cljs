@@ -47,11 +47,11 @@
   Stroke
   (next-point [s e]
     (let [[x y] (get-point e)]
-      (async/put! ch (messages/Line. last-x last-y x y))
+      (async/put! ch (messages/line last-x last-y x y))
       (LocalStroke. ch x y)))
   (complete [s e]
     (let [[x y] (get-point e)]
-      (async/put! ch (messages/Line. last-x last-y x y))
+      (async/put! ch (messages/line last-x last-y x y))
       nil)))
 
 (defn begin-local-stroke

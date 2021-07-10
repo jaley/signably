@@ -12,7 +12,7 @@
   "Batches messages passing through in-ch and delivers a vector
   to returned output channel for all messages that arrived within
   timeout-ms."
-  [timeout-ms in-ch]
+  [in-ch timeout-ms]
   (let [out-ch (async/chan)]
     (async/go-loop [buffer  []
                     time-ch (async/timeout timeout-ms)]
@@ -41,8 +41,8 @@
   (let [next-id  (atom 0)
         metadata {:color "green"}]
     (fn [lines]
-      (let [message-id (messages/MessageId. (swap! next-id inc))]
-        (messages/Batch. user-id message-id metadata lines)))))
+      (let [message-id (messages/message-id (swap! next-id inc))]
+        (messages/batch user-id message-id metadata lines)))))
 
 (defn- dump
   "Helper to log messages from channel"
@@ -58,17 +58,16 @@
   channel will be rendered to canvas. stroke-ch should be a channel
   providing the raw stroke input data (Lines) from the user"
   [stroke-ch]
-  (let [user-id    (session/session-id)
-        card-id    (session/active-card-id)
+  (let [user-id (session/session-id)
+        card-id (session/active-card-id)
         stroke-mch (async/mult stroke-ch)
-        render-ch  (async/chan)
-        ably       (ably/realtime-client user-id card-id)]
-    (.log js/console ably)
+        render-ch (async/chan)
+        [ably-in ably-out] (ably/channels-for-card user-id card-id)]
     ;; tap raw input to batching and publishing through Ably
-    (->> (async/tap stroke-mch (async/chan))
-         (batch-every-ms message-batch-duration-ms)
-         (async/map (batch-packer user-id))
-         dump)
+    (as-> (async/tap stroke-mch (async/chan)) ch
+      (batch-every-ms ch message-batch-duration-ms)
+      (async/map (batch-packer user-id) ch)
+      (async/pipe ch ably-in))
 
     ;; loop input directly back to rendering channel for low latency
     ;; rendering of user direct input (and return it to caller)

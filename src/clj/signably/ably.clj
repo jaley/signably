@@ -1,6 +1,7 @@
 (ns signably.ably
   "Functions for working with Ably Java SDK"
   (:require
+   [signably.common.util :as util]
    [config.core :refer [env]]
    [cheshire.core :as json])
   (:import
@@ -34,7 +35,7 @@
   the given card-id. Return value is JSON string expected by SDK"
   [card-id]
   (json/encode
-   {(str "signatures:card-" card-id) ["subscribe", "publish", "presence"]}))
+   {(util/channel-name card-id) ["subscribe", "publish", "presence"]}))
 
 (defn generate-token-for-client
   "Generate an Ably access token for client with given client-id"
