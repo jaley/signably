@@ -48,8 +48,9 @@
   "Helper to log messages from channel"
   [ch]
   (async/go-loop []
-    (.log js/console (async/<! ch))
-    (recur)))
+    (when-let [msg (async/<! ch)]
+      (.log js/console msg)
+      (recur))))
 
 (defn init-broker!
   "Connect a new message broker and return the output channel.
