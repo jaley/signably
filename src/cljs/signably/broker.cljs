@@ -6,7 +6,7 @@
    [signably.pubsub :as ably]
    [clojure.core.async :as async]))
 
-(def ^:const message-batch-duration-ms 100)
+(def ^:const message-batch-duration-ms 50)
 
 (defn- batch-every-ms
   "Batches messages passing through in-ch and delivers a vector
@@ -44,6 +44,18 @@
       (let [message-id (messages/message-id (swap! next-id inc))]
         (messages/batch user-id message-id metadata lines)))))
 
+(defn- unbatch
+  "Channel is expected to contain batch messages. Return value
+  is a channel containing the unbatched versions for rendering."
+  [ch]
+  (let [out (async/chan)]
+    (async/go-loop []
+      (when-let [batch (async/<! ch)]
+        (doseq [line (:lines batch)]
+          (async/>! out line))
+        (recur)))
+    out))
+
 (defn- dump
   "Helper to log messages from channel"
   [ch]
@@ -62,14 +74,23 @@
         card-id (session/active-card-id)
         stroke-mch (async/mult stroke-ch)
         render-ch (async/chan)
+        render-mch (async/mix render-ch)
         [ably-in ably-out] (ably/channels-for-card user-id card-id)]
+
     ;; tap raw input to batching and publishing through Ably
     (as-> (async/tap stroke-mch (async/chan)) ch
       (batch-every-ms ch message-batch-duration-ms)
       (async/map (batch-packer user-id) ch)
       (async/pipe ch ably-in))
 
+    ;; connect incoming messages from other users to the render loop
+    (as-> ably-out ch
+      (async/pipe ch (async/chan 1 (remove #(= user-id (:user-id %)))))
+      (unbatch ch)
+      (async/admix render-mch ch))
+
     ;; loop input directly back to rendering channel for low latency
     ;; rendering of user direct input (and return it to caller)
     ;; note: need echo disabled on Ably for this
-    (async/pipe (async/tap stroke-mch (async/chan)) render-ch)))
+    (async/admix render-mch (async/tap stroke-mch (async/chan)))
+    render-ch))
