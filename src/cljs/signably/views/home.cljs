@@ -15,7 +15,7 @@
                        :user-id (session-id)}
 
               :handler
-              (fn [{:keys [card ably-token-request] :as response}]
+              (fn [{:keys [card] :as response}]
                 (accountant/navigate!
                  (path-for :card {:card-id (:id card)})))
 

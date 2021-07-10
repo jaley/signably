@@ -6,6 +6,8 @@
 
   :dependencies [[org.clojure/clojure "1.10.3"]
                  [org.clojure/core.async "1.3.618"]
+                 [org.clojure/clojurescript "1.10.866" :scope "provided"]
+                 [com.cognitect/transit-cljs "0.8.269"]
                  [io.ably/ably-java "1.2.6"]
                  [reagent "1.1.0"]
                  [reagent-utils "0.3.3"]
@@ -18,8 +20,6 @@
                  [ring-server "0.5.0"]
                  [hiccup "1.0.5"]
                  [yogthos/config "1.1.7"]
-                 [org.clojure/clojurescript "1.10.866"
-                  :scope "provided"]
                  [metosin/reitit "0.5.12"]
                  [pez/clerk "1.0.0"]
                  [venantius/accountant "0.2.5"

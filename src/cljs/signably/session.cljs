@@ -14,3 +14,9 @@
       (let [session-id (random-session-id)]
         (session/put! ::session-id session-id)
         session-id)))
+
+(defn active-card-id
+  "Return the card ID set by Accountant when navigating pages"
+  []
+  (or (session/get-in [:route :route-params :card-id])
+      (throw (js/Error. "card-id not set in Reagent session"))))

@@ -63,14 +63,14 @@
 (defn init
   "Return a factory to produce the canvas element"
   [id w h]
-  (let [input-ch (async/chan)
-        _ch      (renderer id (broker/init-broker! input-ch))
-        stroke   (atom nil)]
-    (fn []
+  (fn []
+    (let [input-ch (async/chan)
+          _ch      (renderer id (broker/init-broker! input-ch))
+          stroke   (atom nil)]
       [:canvas
        {:id id
         :width w
         :height h
         :on-mouse-down #(reset! stroke (begin-local-stroke input-ch %))
-        :on-mouse-move #(swap! stroke next-point % )
+        :on-mouse-move #(swap! stroke next-point %)
         :on-mouse-up   #(swap! stroke complete %)}])))

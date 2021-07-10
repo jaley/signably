@@ -1,7 +1,7 @@
 (ns signably.common.messages
   "Message data types shared between CLJ and CLJS")
 
-(defrecord MessageId [session message])
+(defrecord MessageId [id])
 
 (defrecord Line [x1 y1 x2 y2])
 
