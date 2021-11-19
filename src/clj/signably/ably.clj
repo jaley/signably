@@ -11,7 +11,8 @@
 (defn- ^AblyRest rest-client
   "Construct a new AblyRest client using environment-injected private key"
   []
-  (AblyRest. (env :ably-private-key)))
+  (AblyRest. (or (env :ably-private-key)
+                 (throw (Exception. "Unable to find Ably secrets in environment.")))))
 
 (defmacro ^:private pojo
   "Generate code to assign params using public mutable fields in pojo"
