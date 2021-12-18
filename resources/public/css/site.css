@@ -81,3 +81,13 @@ button {
 #signing-canvas {
   border: #eaeaea 2px solid;
 }
+
+.paper {
+  fill: #fafafa;
+}
+
+.signatures {
+  fill: "transparent";
+  stroke-width: 3px;
+  stroke-linecap: "round";
+}

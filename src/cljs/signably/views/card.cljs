@@ -2,7 +2,7 @@
   "Main card signing view"
   (:require
    [signably.components.presence :as presence]
-   [signably.components.canvas :as canvas]))
+   [signably.components.svg-canvas :as canvas]))
 
 (defn init
   "Returns a factory for the card page"

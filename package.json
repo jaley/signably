@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "shadow-cljs": "^2.14.3"
+    "shadow-cljs": "^2.15.12"
   },
   "dependencies": {
     "ably": "^1.2.10",
