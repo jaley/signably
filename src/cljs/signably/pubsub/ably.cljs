@@ -2,7 +2,6 @@
   "Ably helpers to connect pub/sub messages to ClojureScript async"
   (:require
    [signably.common.util :as util]
-   [signably.common.messages :as msg]
    [clojure.core.async :as async]
    [ajax.core :as ajax]
    [cognitect.transit :as transit]
