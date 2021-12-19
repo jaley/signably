@@ -27,7 +27,7 @@
                     fill   "transparent"
                     stroke "green"}
              :as attrs}]
-  [:path.signatures
+  [:path
    {:d      (path-commands points)
     :class  class
     :fill   fill
