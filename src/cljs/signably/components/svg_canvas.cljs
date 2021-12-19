@@ -1,6 +1,6 @@
 (ns signably.components.svg-canvas
   (:require [reagent.core :as r]
-            [clojure.string :as str]))
+            [signably.helpers.svg :as svg]))
 
 (defn- point-transform
   "Returns a function that will take mouse events and transform
@@ -24,20 +24,6 @@
 (defn- add-point
   [strokes stroke-id point]
   (update-in strokes [stroke-id :points] conj point))
-
-(defn move-command
-  [[x y]]
-  (str "M " x \space y \space))
-
-(defn line-command
-  [[x y]]
-  (str "L " x \space y \space))
-
-(defn path-commands
-  [points]
-  (str/join \space
-            (cons (move-command (first points))
-                  (map line-command (rest points)))))
 
 (defn init
   "Return a factory to produce an SVG-based drawing canvas"
@@ -65,7 +51,6 @@
 
        (for [[id stroke] @strokes]
          ;; TODO: add user-based color as stroke attribute
-         ^{:key id} [:path.signatures
-                     {:d (path-commands (:points stroke))
-                      :fill "transparent"
-                      :stroke "green"}])])))
+         (with-meta
+           (svg/path (:points stroke) :class "signatures")
+           {:key id}))])))
