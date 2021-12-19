@@ -41,6 +41,7 @@
        [:rect.paper {:width "100%", :height "100%"}]
 
        ;; add a path for each stroke in the model
-       (for [[id stroke] (model/read stroke-reader)]
+       (for [[id stroke] (model/read stroke-reader)
+             :let [points (:points stroke)]]
          ;; TODO: add user-based color as stroke attribute
-         ^{:key id} [svg/path (:points stroke) :class "signatures"])])))
+         ^{:key id} [svg/path points {:class "signatures"}])])))

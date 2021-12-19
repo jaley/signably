@@ -1,4 +1,4 @@
-(ns signably.pubsub
+(ns signably.pubsub.ably
   "Ably helpers to connect pub/sub messages to ClojureScript async"
   (:require
    [signably.common.util :as util]
@@ -50,7 +50,8 @@
   (let [ably-chan (.. client -channels (get channel-name))]
     (.subscribe ably-chan "batch"
                 (fn [msg]
-                  (async/put! ch (transit-deserialise (.-data msg)))))))
+                  (when-let [msg (transit-deserialise (.-data msg))]
+                    (async/put! ch msg))))))
 
 (defn channels-for-card
   "Returns a vector of [in out] async channels for messages going in

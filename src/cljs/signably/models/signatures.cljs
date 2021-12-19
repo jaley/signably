@@ -1,6 +1,7 @@
 (ns signably.models.signatures
   "Model data structure and protocols for card signatures"
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [signably.pubsub.exchange :as exch]))
 
 (defprotocol SignaturesReader
   (read [this]
@@ -29,19 +30,25 @@
   [strokes stroke-id point]
   (update-in strokes [stroke-id :points] conj point))
 
-(defrecord SignatureMap [signatures]
-  SignaturesReader
-  (read [this] @signatures)
-
-  SignaturesWriter
-  (begin  [this point]
-    (let [id (new-stroke-id)]
-      (r/rswap! signatures assoc id (new-stroke id point))
-      id))
-  (append [this stroke-id point]
-    (r/rswap! signatures add-point stroke-id point)))
-
 (defn init
-  "Set up a signature model for given card ID"
+  "Construct and return a model implementation for given card-id"
   [card-id]
-  (SignatureMap. (r/atom {})))
+  (let [signatures (r/atom {})
+        exchange   (exch/init
+                    (reify exch/Inbound
+                      (update-model [model stroke]
+                        (r/rswap! signatures assoc (:id stroke) stroke)
+                        model)))]
+    (reify
+      SignaturesReader
+      (read [this] @signatures)
+
+      SignaturesWriter
+      (begin [this point]
+        (let [id (new-stroke-id)]
+          (r/rswap! signatures assoc id (new-stroke id point))
+          (exch/broadcast exchange (@signatures id))
+          id))
+      (append [this stroke-id point]
+        (r/rswap! signatures add-point stroke-id point)
+        (exch/broadcast exchange (@signatures stroke-id))))))

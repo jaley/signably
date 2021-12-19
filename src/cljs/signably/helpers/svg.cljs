@@ -22,11 +22,11 @@
 (defn path
   "Return an SVG Path element that runs through given point sequence.
   Points is a seq of [x y] vectors."
-  [points & {:keys [class fill stroke]
-             :or   {class  "signatures"
-                    fill   "transparent"
-                    stroke "green"}
-             :as attrs}]
+  [points {:keys [class fill stroke]
+           :or   {class  "signatures"
+                  fill   "transparent"
+                  stroke "green"}
+           :as attrs}]
   [:path
    {:d      (path-commands points)
     :class  class
