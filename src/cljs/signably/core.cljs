@@ -38,7 +38,7 @@
     :about #'about/init
     :card #'card/init))
 
-(defn init!
+(defn ^:export init!
   "Entry point, called by script tag in page served by backend"
   []
   (clerk/initialize!)
