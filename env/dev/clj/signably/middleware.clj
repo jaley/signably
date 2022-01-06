@@ -1,12 +1,10 @@
 (ns signably.middleware
   (:require
    [prone.middleware :refer [wrap-exceptions]]
-   [ring.middleware.reload :refer [wrap-reload]]
-   [ring.middleware.defaults :refer [wrap-defaults]]
+   [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
    [ring.middleware.format :refer [wrap-restful-format]]))
 
 (def middleware
-  [#(wrap-defaults % defaults)
+  [#(wrap-defaults % site-defaults)
    wrap-restful-format
-   wrap-exceptions
-   wrap-reload])
+   wrap-exceptions])
