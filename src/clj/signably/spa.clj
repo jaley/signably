@@ -2,7 +2,8 @@
   "HTML templates to bootstrap the SPA"
   (:require
    [hiccup.page :refer [include-js include-css html5]]
-   [config.core :refer [env]]))
+   [config.core :refer [env]]
+   [ring.util.anti-forgery :as xsrf]))
 
 (def ^:private mount-target
   [:div#app
@@ -24,6 +25,7 @@
   (html5
    (head)
    [:body {:class "body-container"}
+    (xsrf/anti-forgery-field)
     mount-target
     (include-js "/js/app.js")
     [:script "signably.core.init_BANG_()"]]))

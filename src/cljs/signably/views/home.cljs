@@ -3,14 +3,18 @@
   (:require
    [signably.router :refer [path-for]]
    [signably.session :refer [session-id]]
+   [signably.helpers.xsrf :as xsrf]
    [accountant.core :as accountant]
    [ajax.core :as ajax]))
+
+
 
 (defn new-card!
   "Click hanlder fn for new card creation"
   []
   (ajax/POST "/api/card"
-             {:params {:message "message goes here"
+             {:headers {:X-XSRF-Token (xsrf/get-token)}
+              :params {:message "message goes here"
                        ;; TODO: temporarily using session IDs as users
                        :user-id (session-id)}
 
