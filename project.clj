@@ -4,22 +4,22 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure "1.10.3"]
-                 [org.clojure/core.async "1.3.618"]
-                 [org.clojure/clojurescript "1.10.866" :scope "provided"]
+                 [org.clojure/core.async "1.5.648"]
+                 [org.clojure/clojurescript "1.10.914" :scope "provided"]
                  [com.cognitect/transit-cljs "0.8.269"]
-                 [io.ably/ably-java "1.2.6"]
+                 [io.ably/ably-java "1.2.10"]
                  [reagent "1.1.0"]
-                 [reagent-utils "0.3.3"]
-                 [cljs-ajax "0.8.3"]
+                 [reagent-utils "0.3.4"]
+                 [cljs-ajax "0.8.4"]
                  [cljsjs/react "17.0.2-0"]
                  [cljsjs/react-dom "17.0.2-0"]
-                 [ring "1.8.1"]
-                 [ring/ring-defaults "0.3.2"]
+                 [ring "1.9.4"]
+                 [ring/ring-defaults "0.3.3"]
                  [ring-middleware-format "0.7.4"]
                  [ring-server "0.5.0"]
                  [hiccup "1.0.5"]
-                 [yogthos/config "1.1.7"]
-                 [metosin/reitit "0.5.12"]
+                 [yogthos/config "1.1.9"]
+                 [metosin/reitit "0.5.15"]
                  [pez/clerk "1.0.0"]
                  [venantius/accountant "0.2.5"
                   :exclusions [org.clojure/tools.reader]]]
@@ -41,14 +41,14 @@
           :target "resources/public/css/site.min.css"}]]
 
   :profiles {:dev {:repl-options {:init-ns signably.repl}
-                   :dependencies [[cider/piggieback "0.5.2"]
-                                  [binaryage/devtools "1.0.2"]
+                   :dependencies [[cider/piggieback "0.5.3"]
+                                  [binaryage/devtools "1.0.4"]
                                   [ring/ring-mock "0.4.0"]
-                                  [ring/ring-devel "1.9.1"]
-                                  [prone "2020-01-17"]
-                                  [nrepl "0.8.3"]
-                                  [thheller/shadow-cljs "2.14.3"]
-                                  [pjstadig/humane-test-output "0.10.0"]]
+                                  [ring/ring-devel "1.9.4"]
+                                  [prone "2021-04-23"]
+                                  [nrepl "0.9.0"]
+                                  [thheller/shadow-cljs "2.16.12"]
+                                  [pjstadig/humane-test-output "0.11.0"]]
 
                    :source-paths ["env/dev/clj"]
                    :plugins [[lein-figwheel "0.5.20"]]
@@ -60,7 +60,7 @@
 
              :shadow-cljs
              {:dependencies
-              [[com.google.javascript/closure-compiler-unshaded "v20210505"]]}
+              [[com.google.javascript/closure-compiler-unshaded "v20220104"]]}
 
              :uberjar {:hooks [minify-assets.plugin/hooks]
                        :source-paths ["env/prod/clj"]
