@@ -22,7 +22,9 @@
                  [metosin/reitit "0.5.15"]
                  [pez/clerk "1.0.0"]
                  [venantius/accountant "0.2.5"
-                  :exclusions [org.clojure/tools.reader]]]
+                  :exclusions [org.clojure/tools.reader]]
+                 [com.taoensso/timbre "5.1.2"]
+                 [com.fzakaria/slf4j-timbre "0.3.21"]]
 
   :jvm-opts ["-Xmx1G"]
 
