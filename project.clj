@@ -43,6 +43,9 @@
   [[:css {:source "resources/public/css/site.css"
           :target "resources/public/css/site.min.css"}]]
 
+  :omit-source true
+  :jar-exclusions [#"cljs-runtime/.*" #"manifest.edn"]
+
   :profiles {:dev {:repl-options {:init-ns signably.repl}
                    :dependencies [[cider/piggieback "0.5.3"]
                                   [binaryage/devtools "1.0.4"]

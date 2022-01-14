@@ -14,5 +14,4 @@
   (let [port (or (env :port) 3000)
         store (db/mem-store)]
     (log/info "Starting HTTP listener on port: " port)
-    (run-jetty (build-routes store) {:port port :join? false})
-    (log/info "... service running!")))
+    (run-jetty (build-routes store) {:port port :join? false})))
