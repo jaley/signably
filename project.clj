@@ -35,6 +35,7 @@
   :main signably.server
 
   :source-paths ["src/clj" "src/cljc" "src/cljs"]
+  :test-paths ["test/clj"]
 
   :minify-assets
   [[:css {:source "resources/public/css/site.css"
@@ -48,7 +49,9 @@
                                   [prone "2021-04-23"]
                                   [nrepl "0.9.0"]
                                   [thheller/shadow-cljs "2.16.12"]
-                                  [pjstadig/humane-test-output "0.11.0"]]
+                                  [pjstadig/humane-test-output "0.11.0"]
+                                  [org.clojure/spec.alpha "0.3.218"]
+                                  [org.clojure/test.check "1.1.1"]]
 
                    :source-paths ["env/dev/clj"]
                    :plugins [[lein-figwheel "0.5.20"]]

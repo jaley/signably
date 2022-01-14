@@ -1,5 +1,6 @@
 (ns signably.components.svg-canvas
   (:require [reagent.core :as r]
+            [signably.common.data :as data]
             [signably.models.signatures :as model]
             [signably.helpers.svg :as svg]))
 
@@ -42,6 +43,6 @@
 
        ;; add a path for each stroke in the model
        (for [[id stroke] (model/read stroke-reader)
-             :let [points (:points stroke)]]
+             :let [points (::data/points stroke)]]
          ;; TODO: add user-based color as stroke attribute
          ^{:key id} [svg/path points {:class "signatures"}])])))
