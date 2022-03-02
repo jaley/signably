@@ -47,20 +47,15 @@
   :jar-exclusions [#"cljs-runtime/.*" #"manifest.edn"]
 
   :profiles {:dev {:repl-options {:init-ns signably.repl}
-                   :dependencies [[cider/piggieback "0.5.3"]
-                                  [binaryage/devtools "1.0.4"]
+                   :dependencies [[binaryage/devtools "1.0.4"]
                                   [ring/ring-mock "0.4.0"]
                                   [ring/ring-devel "1.9.5"]
-                                  [prone "2021-04-23"]
                                   [nrepl "0.9.0"]
                                   [thheller/shadow-cljs "2.16.12"]
-                                  [pjstadig/humane-test-output "0.11.0"]
                                   [org.clojure/spec.alpha "0.3.218"]
                                   [org.clojure/test.check "1.1.1"]]
 
                    :source-paths ["env/dev/clj"]
-                   :injections [(require 'pjstadig.humane-test-output)
-                                (pjstadig.humane-test-output/activate!)]
 
                    :env {:dev true}}
 
