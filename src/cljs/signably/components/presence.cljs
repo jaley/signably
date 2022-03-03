@@ -16,7 +16,7 @@
   [users]
   (fn []
     [:div.presence
-     [:div.presence-title "Active Signees"]
+     [:div.presence-title "Collaborators"]
      [:ul.presence-list
       (for [user users]
         [:li {:style {:color (color user)}} (name user)])]]))

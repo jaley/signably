@@ -10,7 +10,7 @@
     [:div#nav.nav-bar
      [:div.nav-title "Signably"]
      [:div.nav-links
-      [:p
+      [:p.nav-text
        [:a {:href (path-for :home)} "Home"]
        " | "
        [:a {:href (path-for :about)} "About Signably"]]]]))

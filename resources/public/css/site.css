@@ -71,6 +71,10 @@ button {
   float: right;
 }
 
+.nav-text {
+  margin: 4px;
+}
+
 .presence {
   width: 180px;
   max-height: 500px;
@@ -86,7 +90,7 @@ button {
 }
 
 .presence-title {
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 
 #signing-canvas {
