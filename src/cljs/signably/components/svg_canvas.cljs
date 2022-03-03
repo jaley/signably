@@ -1,8 +1,23 @@
 (ns signably.components.svg-canvas
   (:require [reagent.core :as r]
+            [ajax.core :as ajax]
             [signably.common.data :as data]
             [signably.models.signatures :as model]
-            [signably.helpers.svg :as svg]))
+            [signably.helpers.svg :as svg]
+            [signably.session :as session]))
+
+(defn get-card-info!
+  "Load card info and set it in card state reagent atom"
+  [card-id card-state]
+  (ajax/GET (str"/api/card/" card-id)
+            {:handler
+             (fn [{:keys [card] :as response}]
+               (r/rswap! card-state (constantly card)))
+
+             :error-handler
+             (fn [response]
+               (.log js/console
+                     "Error retrieving card state: " response))}))
 
 (defn- point-transform
   "Returns a function that will take mouse events and transform
@@ -13,6 +28,16 @@
           rect (.getBoundingClientRect elem)]
       [(- (.-clientX e) (.-left rect))
        (- (.-clientY e) (.-top rect))])))
+
+(defn message-elem
+  "Reagent component for message text"
+  [w h]
+  (let [card-state (r/atom nil)]
+    (fn []
+      (get-card-info! (session/active-card-id) card-state)
+      [:text.message-text
+       {:x (/ w 2) :y (/ h 2) :text-anchor "middle"}
+       (get-in @card-state [:metadata :message])])))
 
 (defn init
   "Return a factory to produce an SVG-based drawing canvas"
@@ -40,6 +65,9 @@
 
        ;; paper background
        [:rect.paper {:width "100%", :height "100%"}]
+
+       ;; greeting message
+       [message-elem w h]
 
        ;; add a path for each stroke in the model
        (for [[id stroke] (model/read stroke-reader)

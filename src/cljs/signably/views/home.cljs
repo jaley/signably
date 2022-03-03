@@ -14,7 +14,9 @@
   []
   (ajax/POST "/api/card"
              {:headers {:X-XSRF-Token (xsrf/get-token)}
-              :params {:message "message goes here"
+              :params {:message (.. js/document
+                                    (getElementById "new-card-message")
+                                    -value)
                        ;; TODO: temporarily using session IDs as users
                        :user-id (session-id)}
 
@@ -33,8 +35,11 @@
   (fn []
     [:div.section
      [:div
-      [:button {:on-click new-card!}
-       "New Card"]]
+      [:input.message-input
+       {:id "new-card-message"
+        :type "text"
+        :defaultValue "Happy Birthday!"}]
+      [:button {:on-click new-card!} "New Card"]]
      [:div
       [:h4 "Open Cards"]
       [:p "You have no cards open."]]]))
