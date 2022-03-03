@@ -8,9 +8,7 @@
 (defn- get-card-id
   "Helper to retrieve and cast card-id in params map"
   [req]
-  (-> req
-      (get-in [:path-params :card-id])
-      Integer/parseUnsignedInt))
+  (get-in req [:path-params :card-id]))
 
 (defn- new-card-handler
   "Create a request handler for creating new cards"
