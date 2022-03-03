@@ -17,6 +17,7 @@
                  [ring/ring-defaults "0.3.3"]
                  [ring-middleware-format "0.7.4"]
                  [ring-server "0.5.0"]
+                 [ring-oauth2 "0.2.0"]
                  [hiccup "1.0.5"]
                  [yogthos/config "1.1.9"]
                  [metosin/reitit "0.5.16"]
