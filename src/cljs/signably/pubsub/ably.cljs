@@ -29,7 +29,7 @@
   Client will request access to card-id related channels for user-id."
   [user-id card-id]
   (ably/Realtime. #js {:authUrl (token-request-url card-id)
-                       :authParams {:user-id user-id}
+                       :clientId user-id
                        :echoMessages false}))
 
 (defn- attach-publisher!
@@ -62,3 +62,14 @@
     (attach-publisher! client in-ch (util/channel-name card-id))
     (attach-subscriber! client out-ch (util/channel-name card-id))
     [in-ch out-ch]))
+
+(defn listen-for-presence
+  "Attaches the given listener functions to the Ably presence
+  callbacks on the appropriate channel for this card"
+  [user-id card-id on-enter on-leave on-start]
+  (let [client (realtime-client user-id card-id)
+        chan   (.. client -channels (get (util/channel-name card-id)))]
+    (.. chan -presence (subscribe "enter" on-enter))
+    (.. chan -presence (subscribe "leave" on-leave))
+    (.. chan -presence (get on-start))
+    (.. chan -presence enter)))

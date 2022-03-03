@@ -3,6 +3,7 @@
   (:require [clojure.spec.alpha :as s]))
 
 (s/def ::stroke-id string?)
+(s/def ::user-id string?)
 (s/def ::point (s/tuple int? int?))
 (s/def ::points (s/coll-of ::point))
 (s/def ::stroke
@@ -18,9 +19,10 @@
 
 (defn new-stroke
   "Create an empty new stroke entity map"
-  ([] (new-stroke nil))
-  ([point]
-   {::stroke-id (gen-uuid)
+  ([user-id] (new-stroke user-id nil))
+  ([user-id point]
+   {::user-id   user-id
+    ::stroke-id (gen-uuid)
     ::points    (if point [point] [])}))
 
 (s/fdef new-stroke

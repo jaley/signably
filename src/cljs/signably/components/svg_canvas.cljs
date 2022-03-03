@@ -4,6 +4,7 @@
             [signably.common.data :as data]
             [signably.models.signatures :as model]
             [signably.helpers.svg :as svg]
+            [signably.helpers.colors :as colors]
             [signably.session :as session]))
 
 (defn get-card-info!
@@ -71,6 +72,7 @@
 
        ;; add a path for each stroke in the model
        (for [[id stroke] (model/read stroke-reader)
-             :let [points (::data/points stroke)]]
-         ;; TODO: add user-based color as stroke attribute
-         ^{:key id} [svg/path points {:class "signatures"}])])))
+             :let [points  (::data/points stroke)
+                   user-id (::data/user-id stroke)]]
+         ^{:key id} [svg/path points {:class "signatures"
+                                      :stroke (colors/color-for-user user-id)}])])))

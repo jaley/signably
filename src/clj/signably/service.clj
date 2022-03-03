@@ -41,7 +41,7 @@
   "Create a ring handler function for token requests"
   [store]
   (fn [req]
-    (let [user (get-in req [:params :user-id])
+    (let [user (get-in req [:params :clientId])
           card (get-card-id req)]
       {:status 200
        :body   (ably/generate-token-for-client user card)})))
