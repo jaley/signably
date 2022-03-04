@@ -77,7 +77,6 @@ button {
 
 .presence {
   width: 180px;
-  max-height: 500px;
   min-height: 240px;
   border: #767676 1px solid;
   background-color: #f7f7f7;
@@ -91,6 +90,20 @@ button {
 
 .presence-title {
   font-size: 1.1em;
+}
+
+.presence-counter {
+  float: right;
+}
+
+.presence-list {
+  margin: 4px;
+}
+
+.presence-list-container {
+  overflow-y: auto;
+  max-height: 300px;
+  line-height: 1.25em;
 }
 
 #signing-canvas {
