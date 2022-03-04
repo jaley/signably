@@ -25,9 +25,7 @@
                  [venantius/accountant "0.2.5"
                   :exclusions [org.clojure/tools.reader]]
                  [com.taoensso/timbre "5.1.2"]
-                 [com.fzakaria/slf4j-timbre "0.3.21"]
-                 [software.amazon.kinesis/amazon-kinesis-client "2.4.0"]
-                 [com.taoensso/faraday "1.11.4"]]
+                 [com.fzakaria/slf4j-timbre "0.3.21"]]
 
   :jvm-opts ["-Xmx1G"]
 
