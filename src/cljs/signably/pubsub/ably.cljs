@@ -24,13 +24,15 @@
   [card-id]
   (str "/api/token/" card-id))
 
-(defn- realtime-client
-  "Construct and return an Ably Realtime client using token authentication.
-  Client will request access to card-id related channels for user-id."
-  [user-id card-id]
-  (ably/Realtime. #js {:authUrl (token-request-url card-id)
-                       :clientId user-id
-                       :echoMessages false}))
+
+;; Construct and return an Ably Realtime client using token authentication.
+;; Client will request access to card-id related channels for user-id.
+(def realtime-client
+  (memoize
+   (fn [user-id card-id]
+     (ably/Realtime. #js {:authUrl (token-request-url card-id)
+                          :clientId user-id
+                          :echoMessages false}))))
 
 (defn- attach-publisher!
   "Set up an async publisher worker to push all messages coming through ch
